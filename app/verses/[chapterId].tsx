@@ -2,6 +2,7 @@
 import { useLanguage } from "@/context/LanguageContext";
 import { useTheme } from "@/context/ThemeContext";
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { ArrowLeft } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import { FlatList, ImageBackground, Pressable, Text, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -30,6 +31,7 @@ const THEME_COLORS = {
     buttonBg: "bg-yellow-200",
     buttonText: "text-amber-50",
     textPrimary: "text-amber-200",
+    iconColor: "#ffffff",
   },
   light: {
     background: undefined,
@@ -43,6 +45,7 @@ const THEME_COLORS = {
     buttonBg: "bg-blue-500",
     buttonText: "text-white",
     textPrimary: "text-gray-900",
+        iconColor: "#ffffff",
   },
   dark: {
     background: undefined,
@@ -56,6 +59,7 @@ const THEME_COLORS = {
     buttonBg: "bg-gray-700",
     buttonText: "text-white",
     textPrimary: "text-gray-100",
+        iconColor: "#ffffff",
   },
 };
 
@@ -90,6 +94,13 @@ export default function VersesScreen() {
 
   const renderContent = () => (
     <>
+      {/* Advertisement Container */}
+      <View className={`h-20 ${colors.buttonBg} flex items-center justify-center border-b border-gray-400`}>
+        <Text className={`${colors.buttonText} text-sm font-qs-bold`}>
+          Advertisement Space
+        </Text>
+      </View>
+
       {/* Header */}
       <ImageBackground
         source={require("@/assets/images/chapter-heading.png")}
@@ -104,13 +115,11 @@ export default function VersesScreen() {
             className="absolute left-0 right-0 top-20 h-12 bg-gradient-to-b from-black/60 to-transparent"
           />
           <Pressable
-            onPress={() => router.push("/chapters")}
+            onPress={() => router.push(`/chapters`)}
             className="p-2"
             android_ripple={{ color: colors.headerText }}
           >
-            <Text className={`text-3xl font-qs-bold ${colors.headerText}`}>
-              ←
-            </Text>
+            <ArrowLeft size={24} color={colors.iconColor} />
           </Pressable>
           <Text
             className={`text-3xl font-qs-bold ${colors.headerText} flex-1 text-center`}
@@ -157,20 +166,22 @@ export default function VersesScreen() {
                   resizeMode="cover"
                   className="p-4"
                 >
-                  <View className="relative" style={{ minHeight: 80 }}>
+                  <View className="relative" style={{ minHeight: 60 }}>
                     <View className="flex-row items-center justify-between gap-4 relative">
-                      <View
-                        className={`${colors.buttonBg} w-12 h-12 rounded-lg justify-center items-center`}
+                      <ImageBackground
+                        source={require("@/assets/images/chapter-count.png")}
+                        resizeMode="cover"
+                        className={`w-16 h-16 rounded-lg justify-center items-center`}
                       >
                         <Text
                           className={`${colors.buttonText} font-qs-bold text-lg`}
                         >
                           {item.Verse}
                         </Text>
-                      </View>
+                      </ImageBackground>
                       <Text
                         numberOfLines={2}
-                        className={`text-base font-qs-regular flex-1 ${colors.cardText}`}
+                        className={`text-lg font-qs-bold flex-1 ${colors.cardText}`}
                       >
                         {item.Shloka}
                       </Text>

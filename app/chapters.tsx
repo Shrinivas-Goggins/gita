@@ -186,7 +186,7 @@ export default function ChaptersScreen() {
             className="flex-1"
             style={{ paddingTop: top, paddingBottom: bottom }}
           >
-            <View className="w-full h-16 bg-yellow-700 flex items-center justify-center">
+            <View className="w-full h-20 bg-yellow-700 flex items-center justify-center">
               {/* Advertisment */}
               <Text className="text-sm opacity-70">Adsvertisement</Text>
             </View>
@@ -197,7 +197,7 @@ export default function ChaptersScreen() {
         </ImageBackground>
       ) : (
         <>
-          <View className="w-full h-16 bg-yellow-700 flex items-center justify-center">
+          <View className="w-full h-20 bg-yellow-700 flex items-center justify-center">
             {/* Advertisment */}
             <Text className="text-sm opacity-70">Adsvertisement</Text>
           </View>
