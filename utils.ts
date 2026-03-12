@@ -95,7 +95,7 @@ const getReadingProgress = (chapter: number, verse: number): number => {
 };
 
 // Optional: Get chapter name in Sanskrit/English
-const getChapterName = (chapter: number, language: 'en' | 'sa' = 'en'): string => {
+export const getChapterName = (chapter: number, language: 'en' | 'sa' = 'en'): string => {
   const chapterNames = {
     en: [
       "Arjuna Vishada Yoga",
