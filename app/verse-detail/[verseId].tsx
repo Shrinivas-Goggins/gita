@@ -1,8 +1,9 @@
 // app/verse-detail/[verseId].tsx
 import { useLanguage } from "@/context/LanguageContext";
 import { useTheme } from "@/context/ThemeContext";
+import { GITA_NAVIGATION } from "@/utils";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { Heart } from "lucide-react-native";
+import { ArrowLeft, Bookmark, ChevronLeft, ChevronRight, Share2 } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import {
   ImageBackground,
@@ -39,6 +40,7 @@ const THEME_COLORS = {
     cardText: "text-amber-950",
     buttonBg: "bg-amber-900",
     buttonText: "text-amber-50",
+    iconColor: "#f2f2f2"
   },
   light: {
     background: undefined,
@@ -49,6 +51,7 @@ const THEME_COLORS = {
     cardText: "text-gray-900",
     buttonBg: "bg-blue-500",
     buttonText: "text-white",
+    iconColor: "#f2f2f2"
   },
   dark: {
     background: undefined,
@@ -59,6 +62,7 @@ const THEME_COLORS = {
     cardText: "text-white",
     buttonBg: "bg-gray-700",
     buttonText: "text-white",
+    iconColor: "#f2f2f2"
   },
 };
 
@@ -69,6 +73,7 @@ export default function VerseDetail() {
   const { theme } = useTheme();
   const [verse, setVerse] = useState<VerseData | null>(null);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
 
   const [commonData, setCommonData] = useState({
     Shloka: "",
@@ -82,7 +87,39 @@ export default function VerseDetail() {
   const { top, bottom } = useSafeAreaInsets();
   const colors = THEME_COLORS[theme];
 
-  console.log(colors.background)
+
+// Your navigation functions using the object
+const onPrevious = () => {
+  if (verseNumber && chapterNumber) {
+    const currentChapter = parseInt(chapterNumber);
+    const currentVerse = parseInt(verseNumber);
+    
+    const prevVerse = GITA_NAVIGATION.getPreviousVerse(currentChapter, currentVerse);
+    
+    if (prevVerse) {
+      const prevVerseId = `${prevVerse.chapter}-${prevVerse.verse}`;
+      router.push(`/verse-detail/${prevVerseId}`);
+    }
+    // If null, we're at the first verse - optionally show a toast or do nothing
+  }
+};
+
+const onNext = () => {
+  if (verseNumber && chapterNumber) {
+    const currentChapter = parseInt(chapterNumber);
+    const currentVerse = parseInt(verseNumber);
+    
+    const nextVerse = GITA_NAVIGATION.getNextVerse(currentChapter, currentVerse);
+    
+    if (nextVerse) {
+      const nextVerseId = `${nextVerse.chapter}-${nextVerse.verse}`;
+      router.push(`/verse-detail/${nextVerseId}`);
+    }
+    // If null, we're at the last verse - optionally show a toast or do nothing
+  }
+};
+
+// Optional: Add progress tracking
 
   useEffect(() => {
     loadVerse();
@@ -147,18 +184,63 @@ export default function VerseDetail() {
         className={`flex-1 ${colors.overlay}`}
         style={{ paddingTop: top, paddingBottom: bottom }}
       >
-        {/* Header */}
-        <View className={`${colors.header} px-2 py-4 flex-row justify-between items-center`}>
-          <Pressable onPress={() => router.back()}>
-            <Text className={`${colors.headerText} text-lg font-qs-bold`}>←</Text>
-          </Pressable>
-          <Text className={`${colors.headerText} text-lg font-qs-bold`}>
-            {chapterNumber}.{verseNumber}
+        {/* Advertisement Container */}
+        <View className={`h-20 ${colors.buttonBg} flex items-center justify-center border-b border-gray-400`}>
+          <Text className={`${colors.buttonText} text-xs font-qs-bold`}>
+            Advertisement Space
           </Text>
-          <Pressable onPress={handleShare}>
-            <Text className={`${colors.headerText} text-lg font-qs-bold`}>⤴</Text>
+        </View>
+
+        {/* Header */}
+            <ImageBackground
+        source={require("@/assets/images/chapter-heading.png")}
+        resizeMode="cover"
+        className={`relative border-b-4 `}
+      >
+        <View
+          className={`px-6 py-4 flex-row items-center justify-between relative`}
+        >
+          <View
+            pointerEvents="none"
+            className="sticky left-0 right-0 top-20 h-12 bg-gradient-to-b from-black/60 to-transparent"
+          />
+          <Pressable
+            onPress={() => router.push(`/verses/${parseInt(chapterNumber as string)}`)}
+            className="p-2"
+            android_ripple={{ color: colors.headerText }}
+          >
+         <ArrowLeft size={24} color={colors.iconColor} />
+          </Pressable>
+          <Text
+            className={`text-3xl font-qs-bold ${colors.headerText} flex-1 text-center`}
+          >
+            Shloka {verseNumber ? `${chapterNumber}.${verseNumber}` : verseId}
+          </Text>
+
+           <View className={`flex-row items-center justify-between gap-3`}>
+          {/* <Pressable
+            onPress={() => setIsBookmarked(!isBookmarked)}
+            className={`p-2`}
+          >
+            <Bookmark
+              size={24}
+              color={isBookmarked ? colors.iconColor : colors.iconColor}
+              fill={isBookmarked ? colors.iconColor : "none"}
+            />
+          </Pressable> */}
+          <Pressable
+            onPress={handleShare}
+            className={`p-2`}
+          >
+            <Share2
+              size={24}
+              color={colors.iconColor}
+              className=""
+            />
           </Pressable>
         </View>
+        </View>
+      </ImageBackground>
 
         <ScrollView className="flex-1 px-2 py-6 mt-4">
           {/* Sanskrit Shloka */}
@@ -228,22 +310,28 @@ export default function VerseDetail() {
 
         </ScrollView>
 
-        {/* Favorite Button */}
-        <View className="px-6 py-4 border-t border-gray-300">
-          <Pressable
-            onPress={() => setIsFavorite(!isFavorite)}
-            className={`${colors.buttonBg} rounded-lg py-3 flex-row justify-center items-center`}
-          >
-            <Heart
-              size={20}
-              color={"#dc2626"}
-              fill={isFavorite ? "#dc2626" : "none"}
-            />
-            <Text className={`${colors.buttonText} font-qs-bold ml-2`}>
-              {isFavorite ? t("favorited") : t("addFavorite")}
-            </Text>
-          </Pressable>
-        </View>
+        {/* Navigation Buttons */}
+<View className="px-6 py-4 border-t border-gray-300 flex-row gap-3 justify-between items-center">
+  <Pressable
+    onPress={onPrevious}
+    className={`${colors.buttonBg} w-1/3 rounded-lg py-3 px-4 flex-row justify-start items-center gap-2`}
+  >
+    <ChevronLeft size={20} color={colors.iconColor} />
+    <Text className={`${colors.buttonText} font-qs-bold`}>
+      {t("Previous")}
+    </Text>
+  </Pressable>
+  
+  <Pressable
+    onPress={onNext}
+    className={`${colors.buttonBg} w-1/3  rounded-lg py-3 px-4 flex-row justify-end items-center gap-2`}
+  >
+    <Text className={`${colors.buttonText} font-qs-bold`}>
+      {t("Next")}
+    </Text>
+    <ChevronRight size={20} color={colors.iconColor} />
+  </Pressable>
+</View>
       </View>
     </ImageBackground>
   );

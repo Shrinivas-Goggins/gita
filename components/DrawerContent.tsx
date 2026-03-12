@@ -97,12 +97,12 @@ const DRAWER_STRUCTURE = {
       descriptionKey: "drawer.chapters_desc",
       route: "/chapters",
     },
-    {
-      id: "favorites",
-      labelKey: "drawer.favorites",
-      descriptionKey: "drawer.favorites_desc",
-      route: "/favorites",
-    },
+    // {
+    //   id: "favorites",
+    //   labelKey: "drawer.favorites",
+    //   descriptionKey: "drawer.favorites_desc",
+    //   route: "/favorites",
+    // },
   ],
   preferences: [
     { id: "language", labelKey: "drawer.language" },
@@ -171,7 +171,7 @@ export function DrawerContent() {
         </Text> */}
 
         {/* Language Dropdown */}
-        <View className="mb-4">
+        {/* <View className="mb-4">
           <Text
             className={`text font-kalam-bold ${colors.headerText} mb-2 px-2 opacity-60`}
           >
@@ -201,7 +201,7 @@ export function DrawerContent() {
               ))}
             </View>
           )}
-        </View>
+        </View> */}
 
         {/* Theme Dropdown */}
         <View>
@@ -420,7 +420,7 @@ function ActionButton({ label, onPress, colors }: any) {
   const content = (
     <Pressable
       onPress={onPress}
-      className={`mb-2 p-4 rounded-lg ${colors.cardBg} border ${colors.cardBorder}`}
+      className={`p-4 rounded-lg ${colors.cardBg} border ${colors.cardBorder}`}
       android_ripple={{ color: colors.cardBorder }}
     >
       <Text className={`font-kalam-bold text-xl ${colors.cardText}`}>{label}</Text>
@@ -430,7 +430,7 @@ function ActionButton({ label, onPress, colors }: any) {
   return colors.backgroundButton ? (
     <ImageBackground
       source={colors.backgroundButton}
-      className="mb-2 rounded-lg overflow-hidden"
+      className="mb-2 rounded-lg overflow-hidden "
       resizeMode="cover"
     >
       {content}

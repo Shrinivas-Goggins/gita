@@ -2,6 +2,7 @@
 import { CHAPTERS } from "@/constants";
 import { useLanguage } from "@/context/LanguageContext";
 import { useTheme } from "@/context/ThemeContext";
+import { getChapterName } from "@/utils";
 import { DrawerActions } from "@react-navigation/native";
 import { useNavigation, useRouter } from "expo-router";
 import { FlatList, ImageBackground, Pressable, Text, View } from "react-native";
@@ -134,7 +135,7 @@ export default function ChaptersScreen() {
                 resizeMode="cover"
                 className="p-4"
               >
-                <View className="relative" style={{ minHeight: 130 }}>
+                <View className="relative" style={{ minHeight: 70 }}>
                   <View className="flex-row items-center justify-between  gap-4 relative ">
                     <View className="h-full">
                       <Text
@@ -146,23 +147,26 @@ export default function ChaptersScreen() {
                     <Text
                       className={`text-3xl font-kalam-bold flex-1 leading-10 ${colors.cardText} mb-1`}
                     >
-                      {getChapterTitle(item)}
+                      
+
+                      {getChapterName(item.id, language === "hi" ? "sa" : "en")}
                     </Text>
                   </View>
 
                   <View>
                     <Text
                       numberOfLines={1}
-                      className={`text-2xl font-kalam-bold mb-1 ml-8  ${colors.cardText}`}
+                      className={`text-lg font-kalam-bold mb-1 ml-8  ${colors.cardText}`}
                     >
-                      {item.verses}
+                      {/* {item.verses} */}
+                      {getChapterTitle(item)}
                     </Text>
                   </View>
-                  <View className="w-full px-8 items-center">
+                  {/* <View className="w-full px-8 items-center">
                     <Text className={`font-kalam-bold ${colors.cardText}`}>
                       {getChapterSummary(item)}
                     </Text>
-                  </View>
+                  </View> */}
                 </View>
               </ImageBackground>
             </Pressable>
@@ -186,7 +190,7 @@ export default function ChaptersScreen() {
             className="flex-1"
             style={{ paddingTop: top, paddingBottom: bottom }}
           >
-            <View className="w-full h-16 bg-yellow-700 flex items-center justify-center">
+            <View className="w-full h-20 bg-yellow-700 flex items-center justify-center">
               {/* Advertisment */}
               <Text className="text-sm opacity-70">Adsvertisement</Text>
             </View>
@@ -197,7 +201,7 @@ export default function ChaptersScreen() {
         </ImageBackground>
       ) : (
         <>
-          <View className="w-full h-16 bg-yellow-700 flex items-center justify-center">
+          <View className="w-full h-20 bg-yellow-700 flex items-center justify-center">
             {/* Advertisment */}
             <Text className="text-sm opacity-70">Adsvertisement</Text>
           </View>
